@@ -1,0 +1,178 @@
+---
+title: "cebrap.lab online  - Raspagem de dados com R"
+subtitle: "Conhecendo API's"
+format:
+  revealjs:
+    incremental: false
+    logo: "https://cursos.cebrap.org.br/wp-content/uploads/2022/02/logo-nav.png"
+    footer: "Slides por [Beatriz Milz](https://beamilz.com), feitos com [Quarto](https://quarto.org/docs/presentations/revealjs/index.html). Códigos e materiais disponíveis no [GitHub](https://github.com/beatrizmilz/2024-10-cebrap-lab-web-scraping). Licença de uso: CC-BY-SA."
+    theme: ["custom.scss"]
+    slide-number: c/t
+    show-slide-number: all
+    hash-type: number
+editor: visual
+lang: pt
+author: "Beatriz Milz"
+date: '2025-09-29'
+date-format: 'MMMM [de] YYYY'
+---
+
+## O que é API?
+
+-   *Application Programming Interface*.
+
+-   É uma forma unificada para acessar dados de uma plataforma, a partir de qualquer linguagem de programação.
+
+-   Facilita a vida da pessoa que programa.
+
+-   Geralmente vem acompanhada de documentação.
+
+-   Reduz o volume na transferência de dados
+
+## API
+
+![](img/API_garcom.png)
+
+## Como funciona uma API?
+
+### 1. Acessar
+
+-   Instruções de acesso na **documentação** da API.
+-   Pode envolver obter um **token** de acesso, que funciona como uma senha.
+
+### 2. Coletar
+
+-   Geralmente são requisições do tipo **GET**.
+-   Pode ou não possuir parâmetros para acessar as informações.
+-   O resultado geralmente vem num arquivo **json**.
+
+## Como funciona uma API?
+
+### 3. Inserir
+
+-   Geralmente são requisições do tipo **POST**.
+-   Necessariamente possui parâmetros para enviar informações ao servidor.
+
+### Pacotes
+
+-   R: `httr` ou `httr2`.
+
+## Tipos de APIs
+
+-   **APIs disponíveis/documentadas**: O site fornece uma forma estruturada e documentada para acessar as páginas (com ou sem necessidade de fazer login).
+
+-   **APIs escondidas**: O site não fornece uma forma estruturada e documentada para acessar as páginas, mas internamente é alimentado por uma API não documentada, que podemos descobrir e usar.
+
+## Requisições
+
+-   **GET**: Requisição para obter dados.
+
+-   **POST**: Requisição que permite envio de dados (ex. parâmetros para autenticação).
+
+# Exemplo - Brasil API
+
+<https://brasilapi.com.br>
+
+## Documentação
+
+![](img/brasil-API-cep.png)
+
+<https://brasilapi.com.br/docs#tag/CEP>
+
+## Compondo uma requisição
+
+-   Precisamos descobrir qual URL acessar.
+
+![](img/compondo-url.png)
+
+## Buscando um CEP no R
+
+```{r}
+#| echo: true
+url_base <- "https://brasilapi.com.br/api" 
+endpoint <- "/cep/v1/"
+query_parameters <- "01310100"
+u_brasilapi <- paste0(url_base, endpoint, query_parameters) 
+u_brasilapi
+```
+
+```{r}
+#| eval: false
+#| echo: true
+httr::GET(u_brasilapi)
+```
+
+```         
+Response [https://brasilapi.com.br/api/cep/v1/01310100]
+  Date: 2024-10-20 20:31
+  Status: 200
+  Content-Type: application/json; charset=utf-8
+  Size: 128 B
+```
+
+## Possíveis status
+
+-   `200` OK
+
+-   `302` Redirecionado
+
+-   `400` Requisição mal formatada
+
+-   `401` Não autorizado
+
+-   `404` Não encontrado
+
+-   `503` Erro no servidor
+
+## JSON
+
+![](img/json.png)
+
+Acesse: <https://brasilapi.com.br/api/cep/v1/01310100>
+
+## Vamos ao R: <BR> `scripts/01-api-documentada.R` {.middle .center}
+
+# APIs escondidas
+
+## APIs escondidas
+
+-   Uma API "escondida" é uma API que não é documentada, mas que é usada internamente por um site.
+
+-   Neste caso, podemos descobrir sua existência explorando.
+
+-   Técnicas mais importantes:
+
+    -   Inspecionar elemento
+
+    -   Aba Network
+
+## Exemplo - Sabesp
+
+1.  Abra o navegador
+2.  Acesse o Portal de Mananciais da Sabesp: <http://mananciais.sabesp.com.br/>
+3.  Vamos explorar o inspetor de elementos e a aba Network!
+
+## Vamos ao R: <BR> `scripts/02-api-escondida.R` {.middle .center}
+
+# Autenticação
+
+## GET e POST
+
+-   **GET** utiliza parâmetros na URL
+    -   Utilizar parâmetro `query=`
+-   **POST** utiliza parâmetros no corpo da requisição
+    -   Utilizar o parâmetro `body=`
+    -   Pode utilizar parâmetros na URL, mas não é comum
+-   A principal diferença entre os dois tipos é a **segurança**
+
+## Autenticação
+
+-   A autenticação é usada tanto em APIs quanto sites.
+
+-   Geralmente acontece através de um parâmetro em uma requisição **POST**.
+
+-   A requisição pode aparecer no *body* ou nos *headers*.
+
+-   Se a API for documentada, as informações de autenticação estarão lá.
+
+## Vamos ao R: <BR> `scripts/03-api-autenticacao.R` {.middle .center}
