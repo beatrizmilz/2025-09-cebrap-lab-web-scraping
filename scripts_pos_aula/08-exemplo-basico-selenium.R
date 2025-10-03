@@ -4,12 +4,15 @@ library(RSelenium)
 
 # Iniciar o servidor do RSelenium. Ele irá abrir uma janela do Firefox
 # Essa etapa pode demorar um pouco
-drv <- rsDriver(browser = "firefox", verbose = FALSE, chromever = NULL,
-                phantomver = NULL)
+drv <- rsDriver(
+  browser = "firefox",
+  verbose = FALSE,
+  chromever = NULL,
+  phantomver = NULL
+)
 
 # descobrindo os métodos!
 # drv$client$
-
 
 # Acessando uma URL
 drv$client$navigate("https://google.com")
