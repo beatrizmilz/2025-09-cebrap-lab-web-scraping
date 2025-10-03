@@ -100,15 +100,15 @@ r_fipe_tabelas <- GET(u_fipe_tabelas)
 # Verificando o status da requisição
 r_fipe_tabelas
 
-mes_referencia_tabela_fipe <- r_fipe_tabelas |> 
+mes_referencia_tabela_fipe <- r_fipe_tabelas |>
   # Convertendo o conteúdo da resposta para um data frame
-  content(simplifyDataFrame = TRUE) |> 
+  content(simplifyDataFrame = TRUE) |>
   # Convertendo o data frame para um tibble
   tibble::as_tibble()
 
 # O resultado é um tibble com os períodos de referência disponíveis,
 # e o código de cada um deles.
-mes_referencia_tabela_fipe |> 
+mes_referencia_tabela_fipe |>
   print(n = 100)
 
 

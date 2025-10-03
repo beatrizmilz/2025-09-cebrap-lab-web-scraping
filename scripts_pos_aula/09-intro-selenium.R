@@ -3,7 +3,12 @@ library(RSelenium)
 
 # Iniciar o servidor do RSelenium. Ele irá abrir uma janela do Firefox
 # Essa etapa pode demorar um pouco
-drv <- rsDriver(browser = "firefox", verbose = FALSE, chromever = NULL, phantomver = NULL)
+drv <- rsDriver(
+  browser = "firefox",
+  verbose = FALSE,
+  chromever = NULL,
+  phantomver = NULL
+)
 
 # ABRINDO O NAVEGADOR ---------------------------------------------------------
 # Acessando uma URL
@@ -50,28 +55,26 @@ readr::write_lines(lista_page_source, "codigo-da-pagina.html")
 
 # extraindo as informações da página ------------
 library(rvest)
-html_pagina <- lista_page_source |> 
-  read_html() 
+html_pagina <- lista_page_source |>
+  read_html()
 
 # Buscando os links
-tabelas <- html_pagina |> 
+tabelas <- html_pagina |>
   html_table()
 
-titulos <- html_pagina |> 
-  html_elements("h3") |> 
-  html_text() |>  
+titulos <- html_pagina |>
+  html_elements("h3") |>
+  html_text() |>
   magrittr::extract(-1) # o primeiro elemento da lista não é útil para nós
-  
-  
+
+
 # transformar lista em uma tabela
-cursos_cebrap <- tabelas |> 
+cursos_cebrap <- tabelas |>
   # só as primeiras três tabelas são úteis
-  magrittr::extract(c(1,2,3)) |> 
-  purrr::set_names(titulos) |> 
-  purrr::list_rbind(names_to = "trilha") |> 
-  dplyr::rename(nome_do_curso = X1,
-                data_do_curso = X2,
-                ministrante = X3)
+  magrittr::extract(c(1, 2, 3)) |>
+  purrr::set_names(titulos) |>
+  purrr::list_rbind(names_to = "trilha") |>
+  dplyr::rename(nome_do_curso = X1, data_do_curso = X2, ministrante = X3)
 
 
 cursos_cebrap
