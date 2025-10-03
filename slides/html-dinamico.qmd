@@ -72,7 +72,7 @@ library(RSelenium)
 
 # Iniciar o servidor do RSelenium. Ele irá abrir uma janela do Firefox
 # Essa etapa pode demorar um pouco
-drv <- rsDriver(browser = "firefox", verbose = FALSE, chromever = NULL)
+drv <- rsDriver(browser = "firefox", verbose = FALSE, chromever = NULL, phantomver = NULL)
 
 # Acessando uma URL
 drv$client$navigate("https://google.com")
@@ -88,6 +88,9 @@ Sys.sleep(2)
 
 # Capturar a tela
 drv$client$screenshot(file = "screenshot_selenium.png")
+
+# Encerrar o servidor
+drv$client$quit()
 ```
 
 ## Demonstração
